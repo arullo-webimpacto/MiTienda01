@@ -12,11 +12,10 @@
     },
     "autoload": {
         "psr-4": {
-            "src\\Command\\": "src/"
+            "Webimpacto\\MiPrimerModulo\\": "src/"
         },
         "classmap": [
-            "ExportCommand.php",
-            "src/"
+            
         ],
         "exclude-from-classmap": []
     },

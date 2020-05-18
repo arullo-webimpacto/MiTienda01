@@ -2,18 +2,15 @@ services:
   _defaults:
     public: true
 
-  mitienda.miprimermodulo.src.createProduct:
-    class: mitienda\miprimermodulo\createProduct
+  webimpacto.mi_primer_modulo.create_product:
+    class: Webimpacto\MiPrimerModulo\CreateProduct
     arguments:
       - "@translator"
-      - "Hello Word!!!!!"
-  mitienda.miprimermodulo.src.Command.ExportCommand:
-    class: mitienda\miprimermodulo\src\Command\ExportCommand
-    tags:
-      - { name: 'console.command' }
+      - "Hello Word!!"
+# ,o-primer-modulo/config/services.yml
+services:
 
-# services:
-#     mitienda.miprimermodulo.miprimermodulo:
-#         class: mitienda\miprimermodulo\Command\ExportCommand
-#         tags:
-#             - { name: 'console.command' }
+  webimpacto.mi_primer_modulo.mi-primer-modulo:export:
+        class: Webimpacto\MiPrimerModulo\Command\ExportCommand
+        tags:
+            - { name: 'console.command' }

@@ -1,9 +1,9 @@
 <?php
-namespace mitienda\miprimermodulo\src;
+namespace Webimpacto\MiPrimerModulo;
 
 use Symfony\Component\Translation\TranslatorInterface;
 
-class createProduct {
+class CreateProduct {
     /** @var TranslatorInterface */
     private $translator;
 
@@ -25,6 +25,6 @@ class createProduct {
      * @return string
      */
     public function getTranslatedCustomMessage() {
-        return $this->translator->trans($this->customMessage, [], 'modules.miprimermodulo');
+        return $this->translator->trans($this->customMessage, [], 'Modules.MiPrimerModulo');
     }
 }

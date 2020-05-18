@@ -1,6 +1,6 @@
 <?php
 // modules/miprimermodulo/src/Controller/DemoController.php
-namespace mitienda\miprimermodulo\Controller;
+namespace Webimpacto\MiPrimerModulo\Controller;
 
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 
@@ -8,10 +8,10 @@ class DemoController extends FrameworkBundleAdminController
 {
     public function demoAction()
     {
-        $yourService = $this->get('mitienda.miprimermodulo.src.createProduct');
+        $createProduct = $this->get('webimpacto.mi_primer_modulo.create_product');
 
-        return $this->render('@Modules/yourmodule/templates/admin/demo.html.twig', [
-            'customMessage' => $yourService->getTranslatedCustomMessage(),
+        return $this->render('@Modules/miprimermodulo/templates/admin/demo.html.twig', [
+            'customMessage' => $createProduct->getTranslatedCustomMessage(),
         ]);
     }
 }

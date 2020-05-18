@@ -1,5 +1,6 @@
 <?php
-namespace mitienda\miprimermodulo\src\Command;
+// mi_primer_modulo/src/Command/ExportCommand.php
+namespace Webimpacto\MiPrimerModulo\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
