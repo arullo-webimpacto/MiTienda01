@@ -1,0 +1,19 @@
+services:
+  _defaults:
+    public: true
+
+  mitienda.miprimermodulo.src.createProduct:
+    class: mitienda\miprimermodulo\createProduct
+    arguments:
+      - "@translator"
+      - "Hello Word!!!!!"
+  mitienda.miprimermodulo.src.Command.ExportCommand:
+    class: mitienda\miprimermodulo\src\Command\ExportCommand
+    tags:
+      - { name: 'console.command' }
+
+# services:
+#     mitienda.miprimermodulo.miprimermodulo:
+#         class: mitienda\miprimermodulo\Command\ExportCommand
+#         tags:
+#             - { name: 'console.command' }
