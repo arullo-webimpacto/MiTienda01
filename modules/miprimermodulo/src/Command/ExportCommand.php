@@ -6,6 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Product;
 
 class ExportCommand extends Command
 {
@@ -18,8 +19,13 @@ class ExportCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Here your business logic.
         $id_product = $input->getArgument('idproduct');
-        $output->write('Hello Word! id_Product es: '.$id_product);
+        //$productt = 
+        $product = new Product($id_product,false, 1, 1,null);
+        // Here your business logic.
+        
+        $output->write('Hello Word! id_Product es: '.$id_product.' ');
+        $output->write('Nombre: '.$product->name.' ');
+        $output->write('Categoría: '.$product->category.' ');
     }
 }
