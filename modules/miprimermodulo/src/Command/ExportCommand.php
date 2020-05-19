@@ -24,8 +24,8 @@ class ExportCommand extends Command
         $product = new Product($id_product,false, 1, 1,null);
         // Here your business logic.
         
-        $output->write('Hello Word! id_Product es: '.$id_product.' ');
-        $output->write('Nombre: '.$product->name.' ');
-        $output->write('Categoría: '.$product->category.' ');
+        $output->writeln('Hello Word! id_Product es: '.$id_product.' ');
+        $output->writeln('Nombre: '.$product->name.' ');
+        $output->writeln('Categoría: '.$product->category.' ');
     }
 }

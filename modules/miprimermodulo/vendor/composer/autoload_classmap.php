@@ -6,7 +6,4 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Webimpacto\\MiPrimerModulo\\Command\\ExportCommand' => $baseDir . '/src/Command/ExportCommand.php',
-    'Webimpacto\\MiPrimerModulo\\Controller\\DemoController' => $baseDir . '/src/Controller/DemoController.php',
-    'Webimpacto\\MiPrimerModulo\\CreateProduct' => $baseDir . '/src/createProduct.php',
 );

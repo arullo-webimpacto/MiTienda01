@@ -20,18 +20,11 @@ class ComposerStaticInit935f3ca9b1d490c18543c5aa6d5dc5f1
         ),
     );
 
-    public static $classMap = array (
-        'Webimpacto\\MiPrimerModulo\\Command\\ExportCommand' => __DIR__ . '/../..' . '/src/Command/ExportCommand.php',
-        'Webimpacto\\MiPrimerModulo\\Controller\\DemoController' => __DIR__ . '/../..' . '/src/Controller/DemoController.php',
-        'Webimpacto\\MiPrimerModulo\\CreateProduct' => __DIR__ . '/../..' . '/src/createProduct.php',
-    );
-
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit935f3ca9b1d490c18543c5aa6d5dc5f1::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit935f3ca9b1d490c18543c5aa6d5dc5f1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit935f3ca9b1d490c18543c5aa6d5dc5f1::$classMap;
 
         }, null, ClassLoader::class);
     }

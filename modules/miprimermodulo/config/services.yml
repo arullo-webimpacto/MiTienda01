@@ -1,10 +1,16 @@
 # mi-primer-modulo/config/services.yml
 services:
 
+  webimpacto.mi_primer_modulo.create_comand:
+        class: Webimpacto\MiPrimerModulo\Command\CrearProductoCommand
+        tags:
+            - { name: 'console.command' }
   webimpacto.mi_primer_modulo.export_comand:
         class: Webimpacto\MiPrimerModulo\Command\ExportCommand
         tags:
             - { name: 'console.command' }
+
+  
 
 # services:
 #   _defaults:
