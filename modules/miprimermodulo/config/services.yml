@@ -1,3 +1,11 @@
+# mi-primer-modulo/config/services.yml
+services:
+
+  webimpacto.mi_primer_modulo.export_comand:
+        class: Webimpacto\MiPrimerModulo\Command\ExportCommand
+        tags:
+            - { name: 'console.command' }
+
 services:
   _defaults:
     public: true
@@ -8,10 +16,4 @@ services:
       - "@translator"
       - "Hello Word!!"
    
-# mi-primer-modulo/config/services.yml
-services:
 
-  webimpacto.mi_primer_modulo.export_comand:
-        class: Webimpacto\MiPrimerModulo\Command\ExportCommand
-        tags:
-            - { name: 'console.command' }
