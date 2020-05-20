@@ -1,4 +1,5 @@
 <?php
+//require_once('./PSWebServiceLibrary.php');
 /**
 * 2007-2020 PrestaShop
 *
@@ -23,6 +24,7 @@
 *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
+require_once('C:/xampp/htdocs/mitienda/modules/miprimermodulo/src/PSWebServiceLibrary.php');
 require 'vendor/autoload.php';
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -189,9 +191,62 @@ class Miprimermodulo extends Module
         // $this->context->smarty->assign(array('categoria_name' => $categoria_name,));
         //$imagenes2 = new Product($params['product']);
 
-        $productt = new Product(1);
-        // $languages = Language::getLanguages();
-        dump($productt);
+        // try
+        // {
+            $webService = new PrestaShopWebservice('http://localhost/mitiendanueva/', 'LZG9E7EVJ6FS1E7TCVAVCESCMXZMHC3X', false);
+            
+            // Here we set the option array for the Webservice : we want products resources
+            $opt = [
+                'resource' => 'products',
+                'filter[id]'  => '[20|21]'
+            ];
+            //dump($opt);
+            // Call
+            $xml = $webService->get($opt);
+            dump('xml');
+            dump($xml);
+            // Here we get the elements from children of customers markup "products"
+            $resources = $xml->products->children();
+            dump('resources');
+            dump($resources);
+
+            $apiKey = `LZG9E7EVJ6FS1E7TCVAVCESCMXZMHC3X`;
+            $authorizationKey = base64_encode($apiKey.':'); // LZG9E7EVJ6FS1E7TCVAVCESCMXZMHC3
+            dump($authorizationKey);
+            foreach ($resources as $resource) {
+                dump('resource');
+                dump($resource);
+                $producttt= new Product($resource);
+                dump('producttttt');
+                dump($producttt);
+                $attributes = $resource->attributes();
+                dump('attributes');
+                dump($attributes);
+                $resourceId = $attributes['id'];
+                dump('resourceId');
+                dump($resourceId);
+                
+                //$url = 'http://LZG9E7EVJ6FS1E7TCVAVCESCMXZMHC3X@localhost/mitiendanueva/api/products/'.$resourceId;
+                 //$url = 'http://'.$authorizationKey.'@localhost/mitiendanueva/api/products/'.$resourceId;
+                 dump($url);
+                // dump('url');
+                // dump($url);
+                // From there you could, for example, use th resource ID to call the webservice to get its details
+            }
+            //dump($resources);
+        //}
+        // catch (PrestaShopWebserviceException $e)
+        // {
+        //     // // Here we are dealing with errors
+        //     // $trace = $e->getTrace();
+        //     // if ($trace[0]['args'][0] == 404) echo 'Bad ID';
+        //     // else if ($trace[0]['args'][0] == 401) echo 'Bad auth key';
+        //     // else echo 'Other error';
+        // }
+        
+        // //$productt = new Product(1);
+        // // $languages = Language::getLanguages();
+        
 
         $product =$params['product'];
         $this->context->smarty->assign(array('product' => $product,));

@@ -1,6 +1,8 @@
 <?php
 // mi_primer_modulo/src/Command/CrearProductoCommand.php
 namespace Webimpacto\MiPrimerModulo\Command;
+//require_once('./PSWebServiceLibrary.php');
+require_once('C:/xampp/htdocs/mitienda/modules/miprimermodulo/src/PSWebServiceLibrary.php');
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -8,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Language;
 use Product;
+use WebserviceRequest;
 
 class CrearProductoCommand extends Command
 {
@@ -22,8 +25,23 @@ class CrearProductoCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //$id_product = $input->getArgument('idproduct');
+        //GET productos de otro Presta
+        //$webService = new PrestaShopWebservice('http://localhost/mitiendanueva/', 'LZG9E7EVJ6FS1E7TCVAVCESCMXZMHC3X', false); 
+        
+            $webService = new PrestaShopWebservice('http://localhost/mitiendanueva/', 'LZG9E7EVJ6FS1E7TCVAVCESCMXZMHC3X', false);
+            
+            // Here we set the option array for the Webservice : we want customers resources
+            $opt['resource'] = 'products';
+            
+            // Call
+            $xml = $webService->get($opt);
+        
+            // Here we get the elements from children of customers markup "customer"
+            $resources = $xml->customers->children();
 
+
+
+        //FIN GET productos de otro Presta
         $sgProduct = new Product(1);
         $nlProduct = new Product(); // Remove ID later
             $nlProduct->id_category_default = 2;
