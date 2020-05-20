@@ -189,7 +189,8 @@ class Miprimermodulo extends Module
         // $this->context->smarty->assign(array('categoria_name' => $categoria_name,));
         //$imagenes2 = new Product($params['product']);
 
-        $productt = new Product(25);
+        $productt = new Product(1);
+        // $languages = Language::getLanguages();
         dump($productt);
 
         $product =$params['product'];
