@@ -192,7 +192,6 @@ class Miprimermodulo extends Module
         // $this->context->smarty->assign(array('categoria_name' => $categoria_name,));
         //$imagenes2 = new Product($params['product']);
 
-        
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -213,15 +212,11 @@ class Miprimermodulo extends Module
         $response = curl_exec($curl);
         
         curl_close($curl);
-            //dump($response);
-            //$productJSON = new Product();
 
             $array = json_decode($response,true);
-            dump($array['products']);
             
             foreach($array['products'] as $productoArrayFuera){
-                dump('producto array fueraaaaa');
-                dump($productoArrayFuera);
+                
                 $curlId = curl_init();
                 curl_setopt_array($curlId, array(
                     CURLOPT_URL => "localhost/mitiendanueva/api/products/".$productoArrayFuera["id"]."?output_format=JSON",
@@ -239,57 +234,133 @@ class Miprimermodulo extends Module
                   ));
                   $responseId = curl_exec($curlId);
                   
-                  dump($responseId);
+                  //dump($responseId);
                     curl_close($curlId);
                     $arrayId = json_decode($responseId,true);
-                    dump($arrayId);
 
 
                 $productImport= $arrayId['product'];
-                //$productImport= $arrayId['product'];
-                dump('ProductoImportadooooooooooooooooooo');
-                dump($productImport);
-
+                //dump($productImport);
+                
                 $productos = new Product();
-                $arrayProductos =$productos->getProducts(1,0,21,'id_product','asc',false,false,null);
-                dump('Array Product');
-                dump($arrayProductos);
+                $arrayProductos =$productos->getProducts(1,0,0,'id_product','asc',false,false,null);
                 
                 $veces_igual= 0;
                         foreach($arrayProductos as $productoArray){
-                            dump('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!dentro de foreach');
-                            // dump('Producto del array');
-                            // dump($productoArray);
-
-                            
-                            
-                            // $veces =0;
-                            // while ($veces <=21 || $veces_igual=0) {
-                            //     dump('dentro de while!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-                                dump('buscando');
-                                dump($productImport['reference']);
-                                dump('para ver si coincide con mis productos, por ejemplo este:');
-                                dump($productoArray['reference']);
-                                dump("igual");
-                                dump($veces_igual);
-                                // dump("veces");
-                                // dump($veces);
+                            //dump($productoArray);
                                 if($productImport['reference'] == $productoArray['reference']){
                                     $veces_igual++; 
                                 }
                                 //$veces++;
                             //}
                         }
+                        $curlCategory = curl_init();
+                        curl_setopt_array($curlCategory, array(
+                        CURLOPT_URL => "localhost/mitiendanueva/api/categories/".$productImport["id_category_default"]."?output_format=JSON",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 0,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "GET",
+                        CURLOPT_HTTPHEADER => array(
+                        "Authorization: Basic Szg0R0RER1ZKUFJJN002SUtZUExLQ0oxVzZCUUNURU06Oc ",
+                        "Cookie: PrestaShop-cbac049c40e842298a95cd1e70b00bde=def50200361ad098563fc2ae544f931676d4d44b5da873585c5ca6b0349e123fdf3330aede70df11b574eae14ae3c38561487679817d13b7095332c7f43c81a49c7f11f0cdd3987d220c3e3ee00c71ad4551c7cbc36e5fa962865788f32303de42f1323f5f103bc86407a0a0cc87b3e43a224e7333192e7028eb678a89f2183cf85b04832ae0b59162a344103517cae9dd7afb4b7135a942cf741fb3214f55429596"
+                        ),
+                    ));
+                    $responseCategory = curl_exec($curlCategory);
+                    
+                    dump($responseCategory);
+                        curl_close($curlCategory);
+                        $arrayCategory = json_decode($responseCategory,true);
+                        dump($arrayCategory['category']);
+                        $categoryImport =$arrayCategory['category'];
+
+                        $categoriaJSON = new Category(null,1,1); // Remove ID later
+                        dump($categoriaJSON);
+
+                        $categoriaJSON->id_category_import = $categoryImport['id'];
+                        dump($categoriaJSON->id_category_import);
+                        $categoriaJSON->id_category=$categoriaJSON->id;
+                        $categoriaJSON->name=$categoryImport['name'][0]['value'];
+                        dump($categoriaJSON->name);
+                        $categoriaJSON->id_parent=$categoryImport['id_parent'];
+                        $categoriaJSON->level_depth=$categoryImport['level_depth'];
+                        $categoriaJSON->id_shop_default=$categoryImport['id_shop_default'];
+                        $categoriaJSON->is_root_category=$categoryImport['is_root_category'];
+                        $categoriaJSON->description=$categoryImport['description'][0]['value'];
+
+
+                //$categoriaJSON->add();
                     
                     
                 if($veces_igual==0){
-                    dump('creamos');
+//Crear categoria
+
+                    $curlCategory = curl_init();
+                        curl_setopt_array($curlCategory, array(
+                        CURLOPT_URL => "localhost/mitiendanueva/api/categories/".$productImport["id_category_default"]."?output_format=JSON",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 0,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "GET",
+                        CURLOPT_HTTPHEADER => array(
+                        "Authorization: Basic Szg0R0RER1ZKUFJJN002SUtZUExLQ0oxVzZCUUNURU06Oc ",
+                        "Cookie: PrestaShop-cbac049c40e842298a95cd1e70b00bde=def50200361ad098563fc2ae544f931676d4d44b5da873585c5ca6b0349e123fdf3330aede70df11b574eae14ae3c38561487679817d13b7095332c7f43c81a49c7f11f0cdd3987d220c3e3ee00c71ad4551c7cbc36e5fa962865788f32303de42f1323f5f103bc86407a0a0cc87b3e43a224e7333192e7028eb678a89f2183cf85b04832ae0b59162a344103517cae9dd7afb4b7135a942cf741fb3214f55429596"
+                        ),
+                    ));
+                    $responseCategory = curl_exec($curlCategory);
+                    
+                    dump($responseCategory);
+                        curl_close($curlCategory);
+                        $arrayCategory = json_decode($responseCategory,true);
+                        dump($arrayCategory);
+
+                        $categoriaJSON = new Product(); // Remove ID later
+                        dump($categoriaJSON);
+                        //  $categoriaJSON->id_category_default = $productImport['id_category_default'];
+                        //  //dump($productJSON->id_category_default);
+                        //  $categoriaJSON->id_category=$productImport['id_category_default'];
+                        //  $categoriaJSON->new;
+                        //  $categoriaJSON->type = $productImport['type'];
+                        //  $categoriaJSON->reference = $productImport['reference'];
+                        //  $categoriaJSON->weight =  $productImport['weight'];
+                        //  // $nlProduct->price = ceil($input->getArgument('precio'));
+                        //  $categoriaJSON->price = $productImport['price'];
+                        //  //$output->writeln('Precio: '.$nlProduct->price);
+                        //  $categoriaJSON->wholesale_price = $productImport['wholesale_price'];
+                        //  $categoriaJSON->active = $productImport['active'];
+                        //  $categoriaJSON->available_for_order = $productImport['available_for_order'];
+                        //  $categoriaJSON->show_price = $productImport['show_price'];
+                        //  $languages = Language::getLanguages();
+                        //  foreach($languages as $lang){
+                        //      //  $nlProduct->name[$lang['id_lang']] = $sgProduct->name->language;
+                        //      //  $nlProduct->description[$lang['id_lang']] = $sgProduct->description->language;
+                        //      $categoriaJSON->name[$lang['id_lang']] = $productImport['name'][0]['value'];
+                        //      //$output->writeln('Hello Word! Nombre Language '.$lang['name'].' es: '.$nlProduct->name[$lang['id_lang']].' ');
+                        //      $categoriaJSON->description[$lang['id_lang']] = $productImport['description'][0]['value'];
+                        //      //$output->writeln('Hello Word! Description Language '.$lang['name'].' es: '.$nlProduct->description[$lang['id_lang']].' ');
+                        //  }
+
+
+
+                // $categoriaJSON->add();
+                // $output->writeln('Hello Word! id_Product es: '.$categoriaJSON->id.' ');
+
+
+ //Fin crear categoria
+
+                    //dump('creamos');
 
                      //$pro= $array['product'];
 
                      $productJSON = new Product(); // Remove ID later
                          $productJSON->id_category_default = $productImport['id_category_default'];
-                         dump($productJSON->id_category_default);
+                         //dump($productJSON->id_category_default);
                          $productJSON->id_category=$productImport['id_category_default'];
                          $productJSON->new;
                          $productJSON->type = $productImport['type'];
@@ -315,183 +386,18 @@ class Miprimermodulo extends Module
 
 
                 //$productJSON->add();
-
+                //$output->writeln('Hello Word! id_Product es: '.$productJSON->id.' ');
                 } else{
-                    dump('Esta repetido');
+                    // dump('Esta repetido');
                 }                   
                 
                 
             }
 
 
-//------------------------------------------------------------Productos mi tienda----------------------------------
-            
-             $productos = new Product();
-             $arrayProductos =$productos->getProducts(1,0,21,'id_product','asc',false,false,null);
-             dump('Array Product');
-             dump($arrayProductos);
-             foreach($arrayProductos as $productoArray){
-                dump('Producto del array');
-                dump($productoArray);
-                // if()
-            }
-//------------------------------------------------------------Productos mi tienda----------------------------------
 
 
-         //dump($productJSON['name']);      // Dump all data of the Object
-        //  $pro= $array['product'];
-
-        //  $productJSON = new Product(); // Remove ID later
-        //      $productJSON->id_category_default = $pro['id_category_default'];
-        //      dump($productJSON->id_category_default);
-        //      $productJSON->id_category=$pro['id_category_default'];
-        //      $productJSON->new;
-        //      $productJSON->type = $pro['type'];
-        //      $productJSON->reference = $pro['reference'];
-        //      $productJSON->weight =  $pro['weight'];
-        //      // $nlProduct->price = ceil($input->getArgument('precio'));
-        //      $productJSON->price = $pro['price'];
-        //      //$output->writeln('Precio: '.$nlProduct->price);
-        //      $productJSON->wholesale_price = $pro['wholesale_price'];
-        //      $productJSON->active = $pro['active'];
-        //      $productJSON->available_for_order = $pro['available_for_order'];
-        //      $productJSON->show_price = $pro['show_price'];
-        //      $languages = Language::getLanguages();
-        //      foreach($languages as $lang){
-        //          //  $nlProduct->name[$lang['id_lang']] = $sgProduct->name->language;
-        //          //  $nlProduct->description[$lang['id_lang']] = $sgProduct->description->language;
-        //          $productJSON->name[$lang['id_lang']] = $pro['name'][0]['value'];
-        //          //$output->writeln('Hello Word! Nombre Language '.$lang['name'].' es: '.$nlProduct->name[$lang['id_lang']].' ');
-        //          $productJSON->description[$lang['id_lang']] = $pro['description'][0]['value'];
-        //          //$output->writeln('Hello Word! Description Language '.$lang['name'].' es: '.$nlProduct->description[$lang['id_lang']].' ');
-        //      }
-
-
-
-     //$productJSON->add();
-
-
-
-
-
-
-
-
-        // try
-        // {
-            // $webService = new PrestaShopWebservice('http://localhost/mitiendanueva/', 'K84GDDGVJPRI7M6IKYPLKCJ1W6BQCTEM', false);
-            
-            // // Here we set the option array for the Webservice : we want products resources
-            // $opt = [
-            //     'resource' => 'products',
-            //     'filter[id]'  => '[20|21]'
-            // ];
-            // //dump($opt);
-            // // Call
-            // $xml = $webService->get($opt);
-            // dump('xml');
-            // dump($xml);
-            // // Here we get the elements from children of customers markup "products"
-            // $resources = $xml->products->children();
-            // dump('resources');
-            // dump($resources);
-
-            // //$apiKey = `K84GDDGVJPRI7M6IKYPLKCJ1W6BQCTEM`;
-            // $authorizationKey = base64_encode('K84GDDGVJPRI7M6IKYPLKCJ1W6BQCTEM:'); // K84GDDGVJPRI7M6IKYPLKCJ1W6BQCTEM
-            // // dump('keyyyy');
-            // // dump($authorizationKey);
-
-            // foreach ($resources as $resource) {
-            //     dump('Estoy en forEach de resources');
-            //     //$webServiceId = new PrestaShopWebservice('http://localhost/mitiendanueva/products/'.$resourceId, 'LZG9E7EVJ6FS1E7TCVAVCESCMXZMHC3X', false);
-            //     dump('resource');
-            //     dump($resource);
-            //     $attributes = $resource->attributes();
-            //     dump('attributes');
-            //     dump($attributes);
-            //     $resourceId = ((int)$attributes['id']);
-            //     dump('resourceId');
-            //     dump($resourceId);
-
-            //     //$webService = new PrestaShopWebservice('http://localhost/mitiendanueva/', 'K84GDDGVJPRI7M6IKYPLKCJ1W6BQCTEM', false);
-            //     $webServiceId = new PrestaShopWebservice('http://localhost/mitiendanueva/', 'K84GDDGVJPRI7M6IKYPLKCJ1W6BQCTEM', false);
-            //     //$webServiceId = new PrestaShopWebservice('http://localhost/mitiendanueva/products/', 'LZG9E7EVJ6FS1E7TCVAVCESCMXZMHC3X', false);
-
-            //     $optId = [
-            //         'resource' => 'products',
-            //         'id'  => $resourceId
-            //     ];
-            //     // dump('optId');
-            //     // dump($optId);
-
-            //     $xmlId = $webServiceId->get($optId);
-            //     dump('xmlId');
-            //     dump($xmlId);
-
-            //     $resourcesId = $xmlId->product->children();
-            //     dump('resourcesId');
-            //     dump($resourcesId);
-            //     // $nombre = $resourcesId->name->language[0];
-            //     // dump('nombre de producto');
-            //     // dump($nombre);
-            //     // $sgProduct = new Product(1);
-            //     $nlProduct = new Product(); // Remove ID later
-            //         $nlProduct->id_category_default = $resourcesId->id_category_default;
-            //         dump('categoria por defecto');
-            //         dump($nlProduct->id_category_default);
-            //         $nlProduct->id_category=$nlProduct->id_category_default;
-            //         dump('categoria id');
-            //         dump($nlProduct->id_category);
-            //         $nlProduct->new;
-            //         $nlProduct->type = $resourcesId->type;
-            //         dump('type');
-            //         dump($nlProduct->type);
-            //         $nlProduct->reference = $resourcesId->reference;
-            //         $nlProduct->weight =  $resourcesId->weight;
-            //         // $nlProduct->price = ceil($input->getArgument('precio'));
-            //         $nlProduct->price = $resourcesId->price;
-            //         //$output->writeln('Precio: '.$nlProduct->price);
-            //         $nlProduct->wholesale_price = $resourcesId->wholesale_price;
-            //         $nlProduct->active = $resourcesId->active;
-            //         $nlProduct->available_for_order = $resourcesId->available_for_order;
-            //         $nlProduct->show_price = $resourcesId->show_price;
-            //         $languages = Language::getLanguages();
-            //         foreach($languages as $lang){
-                        
-            //             //  $nlProduct->name[$lang['id_lang']] = $sgProduct->name->language;
-            //             //  $nlProduct->description[$lang['id_lang']] = $sgProduct->description->language;
-            //             $nlProduct->name[$lang['id_lang']] = $resourcesId->name->language[0];
-            //             dump('Nombre');
-            //             dump($nlProduct->name[$lang['id_lang']]);
-            //             //$output->writeln('Hello Word! Nombre Language '.$lang['name'].' es: '.$nlProduct->name[$lang['id_lang']].' ');
-            //             $nlProduct->description[$lang['id_lang']] = $resourcesId->description->language[0];
-            //             //$output->writeln('Hello Word! Description Language '.$lang['name'].' es: '.$nlProduct->description[$lang['id_lang']].' ');
-            //         }
-            //         // echo($sgProduct->name->language);
-            //         //$nlProduct->add();
-
-                
-            //     // }
-            //     //$url = 'http://LZG9E7EVJ6FS1E7TCVAVCESCMXZMHC3X@localhost/mitiendanueva/api/products/'.$resourceId;
-            //      //$url = 'http://'.$authorizationKey.'@localhost/mitiendanueva/api/products/'.$resourceId;
-            //      //dump($url);
-            //     // dump('url');
-            //     // dump($url);
-            //     // From there you could, for example, use th resource ID to call the webservice to get its details
-            // }
-            //dump($resources);
-        //}
-        // catch (PrestaShopWebserviceException $e)
-        // {
-        //     // // Here we are dealing with errors
-        //     // $trace = $e->getTrace();
-        //     // if ($trace[0]['args'][0] == 404) echo 'Bad ID';
-        //     // else if ($trace[0]['args'][0] == 401) echo 'Bad auth key';
-        //     // else echo 'Other error';
-        // }
         
-        // //$productt = new Product(1);
-        // // $languages = Language::getLanguages();
         
 
         $product =$params['product'];
