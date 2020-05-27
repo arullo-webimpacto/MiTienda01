@@ -133,11 +133,12 @@ class CrearProductoCommand extends Command
                     //dump($arrayCategory['category']);
                     $categoryImport =$arrayCategory['category'];
 
-                    $categoriaJSON = new Category(null,1,1); // Remove ID later
+                    $categoriaJSON = new Category(1,1,1); // Remove ID later
                     //dump($categoriaJSON);
                     
                     $categoriaJSON->id_category_import = $categoryImport['id'];
-                    //  //dump($productJSON->id_category_default);
+
+                    dump($categoriaJSON->id_category_import);
                     $categoriaJSON->id_category=$categoriaJSON->id;
                     $categoriaJSON->name=$categoryImport['name'][0]['value'];
                     $categoriaJSON->id_parent=$categoryImport['id_parent'];
@@ -149,6 +150,7 @@ class CrearProductoCommand extends Command
 
 
                 $categoriaJSON->add();
+                $categoriaJSON->save();
                 $output->writeln('Hello Word! id_category es: '.$categoriaJSON->id_category_import.' ');
 
  //Fin crear categoria

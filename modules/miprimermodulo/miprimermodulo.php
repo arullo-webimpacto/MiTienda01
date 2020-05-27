@@ -240,11 +240,10 @@ class Miprimermodulo extends Module
 
 
                 $productImport= $arrayId['product'];
-                //dump($productImport);
+               //dump($productImport);
                 
                 $productos = new Product();
                 $arrayProductos =$productos->getProducts(1,0,0,'id_product','asc',false,false,null);
-                
                 $veces_igual= 0;
                         foreach($arrayProductos as $productoArray){
                             //dump($productoArray);
@@ -254,105 +253,81 @@ class Miprimermodulo extends Module
                                 //$veces++;
                             //}
                         }
-                        $curlCategory = curl_init();
-                        curl_setopt_array($curlCategory, array(
-                        CURLOPT_URL => "localhost/mitiendanueva/api/categories/".$productImport["id_category_default"]."?output_format=JSON",
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => "",
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => "GET",
-                        CURLOPT_HTTPHEADER => array(
-                        "Authorization: Basic Szg0R0RER1ZKUFJJN002SUtZUExLQ0oxVzZCUUNURU06Oc ",
-                        "Cookie: PrestaShop-cbac049c40e842298a95cd1e70b00bde=def50200361ad098563fc2ae544f931676d4d44b5da873585c5ca6b0349e123fdf3330aede70df11b574eae14ae3c38561487679817d13b7095332c7f43c81a49c7f11f0cdd3987d220c3e3ee00c71ad4551c7cbc36e5fa962865788f32303de42f1323f5f103bc86407a0a0cc87b3e43a224e7333192e7028eb678a89f2183cf85b04832ae0b59162a344103517cae9dd7afb4b7135a942cf741fb3214f55429596"
-                        ),
-                    ));
-                    $responseCategory = curl_exec($curlCategory);
-                    
-                    dump($responseCategory);
-                        curl_close($curlCategory);
-                        $arrayCategory = json_decode($responseCategory,true);
-                        dump($arrayCategory['category']);
-                        $categoryImport =$arrayCategory['category'];
+                        
 
-                        $categoriaJSON = new Category(null,1,1); // Remove ID later
-                        dump($categoriaJSON);
-
-                        $categoriaJSON->id_category_import = $categoryImport['id'];
-                        dump($categoriaJSON->id_category_import);
-                        $categoriaJSON->id_category=$categoriaJSON->id;
-                        $categoriaJSON->name=$categoryImport['name'][0]['value'];
-                        dump($categoriaJSON->name);
-                        $categoriaJSON->id_parent=$categoryImport['id_parent'];
-                        $categoriaJSON->level_depth=$categoryImport['level_depth'];
-                        $categoriaJSON->id_shop_default=$categoryImport['id_shop_default'];
-                        $categoriaJSON->is_root_category=$categoryImport['is_root_category'];
-                        $categoriaJSON->description=$categoryImport['description'][0]['value'];
-
-
+                        
                 //$categoriaJSON->add();
-                    
-                    
+                $asso=$productImport['associations']['images'];
+                        foreach($asso as $imagen){
+                            dump($imagen);
+                           
+                            $curlImagen = curl_init();
+                        curl_setopt_array($curlImagen, array(
+                            CURLOPT_URL => "localhost/mitiendanueva/api/images/".$imagen['id']."?output_format=JSON",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => "",
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => "GET",
+                            CURLOPT_HTTPHEADER => array(
+                                "Authorization: Basic Szg0R0RER1ZKUFJJN002SUtZUExLQ0oxVzZCUUNURU06Oc ",
+                                "Cookie: PrestaShop-cbac049c40e842298a95cd1e70b00bde=def50200361ad098563fc2ae544f931676d4d44b5da873585c5ca6b0349e123fdf3330aede70df11b574eae14ae3c38561487679817d13b7095332c7f43c81a49c7f11f0cdd3987d220c3e3ee00c71ad4551c7cbc36e5fa962865788f32303de42f1323f5f103bc86407a0a0cc87b3e43a224e7333192e7028eb678a89f2183cf85b04832ae0b59162a344103517cae9dd7afb4b7135a942cf741fb3214f55429596"
+                            ),
+                        ));
+                        $responseImagen = curl_exec($curlImagen);
+                        dump($responseImagen);
+                        curl_close($curlImagen);
+                            $arrayImagen = json_decode($responseImagen,true);
+                        dump($arrayImagen);
+
+
+                        }
                 if($veces_igual==0){
 //Crear categoria
 
                     $curlCategory = curl_init();
                         curl_setopt_array($curlCategory, array(
-                        CURLOPT_URL => "localhost/mitiendanueva/api/categories/".$productImport["id_category_default"]."?output_format=JSON",
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => "",
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => "GET",
-                        CURLOPT_HTTPHEADER => array(
-                        "Authorization: Basic Szg0R0RER1ZKUFJJN002SUtZUExLQ0oxVzZCUUNURU06Oc ",
-                        "Cookie: PrestaShop-cbac049c40e842298a95cd1e70b00bde=def50200361ad098563fc2ae544f931676d4d44b5da873585c5ca6b0349e123fdf3330aede70df11b574eae14ae3c38561487679817d13b7095332c7f43c81a49c7f11f0cdd3987d220c3e3ee00c71ad4551c7cbc36e5fa962865788f32303de42f1323f5f103bc86407a0a0cc87b3e43a224e7333192e7028eb678a89f2183cf85b04832ae0b59162a344103517cae9dd7afb4b7135a942cf741fb3214f55429596"
-                        ),
-                    ));
-                    $responseCategory = curl_exec($curlCategory);
-                    
-                    dump($responseCategory);
+                            CURLOPT_URL => "localhost/mitiendanueva/api/categories/".$productImport["id_category_default"]."?output_format=JSON",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_ENCODING => "",
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 0,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => "GET",
+                            CURLOPT_HTTPHEADER => array(
+                                "Authorization: Basic Szg0R0RER1ZKUFJJN002SUtZUExLQ0oxVzZCUUNURU06Oc ",
+                                "Cookie: PrestaShop-cbac049c40e842298a95cd1e70b00bde=def50200361ad098563fc2ae544f931676d4d44b5da873585c5ca6b0349e123fdf3330aede70df11b574eae14ae3c38561487679817d13b7095332c7f43c81a49c7f11f0cdd3987d220c3e3ee00c71ad4551c7cbc36e5fa962865788f32303de42f1323f5f103bc86407a0a0cc87b3e43a224e7333192e7028eb678a89f2183cf85b04832ae0b59162a344103517cae9dd7afb4b7135a942cf741fb3214f55429596"
+                            ),
+                        ));
+                        $responseCategory = curl_exec($curlCategory);
+
                         curl_close($curlCategory);
-                        $arrayCategory = json_decode($responseCategory,true);
-                        dump($arrayCategory);
+                            $arrayCategory = json_decode($responseCategory,true);
+                            $categoryImport =$arrayCategory['category'];
 
-                        $categoriaJSON = new Product(); // Remove ID later
-                        dump($categoriaJSON);
-                        //  $categoriaJSON->id_category_default = $productImport['id_category_default'];
-                        //  //dump($productJSON->id_category_default);
-                        //  $categoriaJSON->id_category=$productImport['id_category_default'];
-                        //  $categoriaJSON->new;
-                        //  $categoriaJSON->type = $productImport['type'];
-                        //  $categoriaJSON->reference = $productImport['reference'];
-                        //  $categoriaJSON->weight =  $productImport['weight'];
-                        //  // $nlProduct->price = ceil($input->getArgument('precio'));
-                        //  $categoriaJSON->price = $productImport['price'];
-                        //  //$output->writeln('Precio: '.$nlProduct->price);
-                        //  $categoriaJSON->wholesale_price = $productImport['wholesale_price'];
-                        //  $categoriaJSON->active = $productImport['active'];
-                        //  $categoriaJSON->available_for_order = $productImport['available_for_order'];
-                        //  $categoriaJSON->show_price = $productImport['show_price'];
-                        //  $languages = Language::getLanguages();
-                        //  foreach($languages as $lang){
-                        //      //  $nlProduct->name[$lang['id_lang']] = $sgProduct->name->language;
-                        //      //  $nlProduct->description[$lang['id_lang']] = $sgProduct->description->language;
-                        //      $categoriaJSON->name[$lang['id_lang']] = $productImport['name'][0]['value'];
-                        //      //$output->writeln('Hello Word! Nombre Language '.$lang['name'].' es: '.$nlProduct->name[$lang['id_lang']].' ');
-                        //      $categoriaJSON->description[$lang['id_lang']] = $productImport['description'][0]['value'];
-                        //      //$output->writeln('Hello Word! Description Language '.$lang['name'].' es: '.$nlProduct->description[$lang['id_lang']].' ');
-                        //  }
-
-
-
-                // $categoriaJSON->add();
-                // $output->writeln('Hello Word! id_Product es: '.$categoriaJSON->id.' ');
-
+                            $categoriaJSON = new Category(null,1,1); // Remove ID later
+                            $categoriaJSON->id_category_import = $categoryImport['id'];
+                            $categoriaJSON->id_category=$categoriaJSON->id;
+                            $categoriaJSON->name=$categoryImport['name'][0]['value'];
+                            $categoriaJSON->id_parent=$categoryImport['id_parent'];
+                            $categoriaJSON->level_depth=$categoryImport['level_depth'];
+                            $categoriaJSON->id_shop_default=$categoryImport['id_shop_default'];
+                            $categoriaJSON->is_root_category=$categoryImport['is_root_category'];
+                            $categoriaJSON->description=$categoryImport['description'][0]['value'];
 
  //Fin crear categoria
+ //Crear categoria
+                        $asso=$productImport['associations']['images'];
+                        foreach($asso as $imagen){
+                            
+                        }
+                        
+                       
+
+//Fin crear categoria
 
                     //dump('creamos');
 
@@ -366,6 +341,10 @@ class Miprimermodulo extends Module
                          $productJSON->type = $productImport['type'];
                          $productJSON->reference = $productImport['reference'];
                          $productJSON->weight =  $productImport['weight'];
+                         $asso=$productImport['associations']['images'];
+                            foreach($asso as $imagen){
+                            
+                            }
                          // $nlProduct->price = ceil($input->getArgument('precio'));
                          $productJSON->price = $productImport['price'];
                          //$output->writeln('Precio: '.$nlProduct->price);
